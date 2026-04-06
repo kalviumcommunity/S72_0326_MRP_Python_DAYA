@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Healthcare Resource Forecasting Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #2E86AB 0%, #1a5276 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 40px;
+            background: #f8f9fa;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+        }
+        
+        .stat-card h3 {
+            color: #666;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+        
+        .stat-card .value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #2E86AB;
+            margin-bottom: 10px;
+        }
+        
+        .stat-card .label {
+            color: #999;
+            font-size: 0.9em;
+        }
+        
+        .visualizations {
+            padding: 40px;
+        }
+        
+        .viz-section {
+            margin-bottom: 50px;
+        }
+        
+        .viz-section h2 {
+            color: #2E86AB;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #2E86AB;
+        }
+        
+        .viz-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .viz-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .viz-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+        }
+        
+        .viz-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .viz-card .caption {
+            padding: 20px;
+            background: #f8f9fa;
+            text-align: center;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        
+        footer {
+            background: #2E86AB;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            font-size: 0.9em;
+        }
+        
+        .download-btn {
+            display: inline-block;
+            background: #F18F01;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 10px;
+            transition: background 0.3s;
+        }
+        
+        .download-btn:hover {
+            background: #C73E1D;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏥 Healthcare Resource Forecasting Dashboard</h1>
+            <p>Data-Driven Insights for Hospital Bed Management</p>
+        </header>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Patients</h3>
+                <div class="value">60,000</div>
+                <div class="label">Analyzed</div>
+            </div>
+            <div class="stat-card">
+                <h3>Average Daily Beds</h3>
+                <div class="value">787</div>
+                <div class="label">beds/day</div>
+            </div>
+            <div class="stat-card">
+                <h3>Peak Demand</h3>
+                <div class="value">840</div>
+                <div class="label">beds</div>
+            </div>
+            <div class="stat-card">
+                <h3>ICU Ratio</h3>
+                <div class="value">20.1%</div>
+                <div class="label">of encounters</div>
+            </div>
+            <div class="stat-card">
+                <h3>Trend</h3>
+                <div class="value" style="color: #C73E1D;">↓</div>
+                <div class="label">Decreasing</div>
+            </div>
+            <div class="stat-card">
+                <h3>7-Day Forecast</h3>
+                <div class="value">777</div>
+                <div class="label">beds/day</div>
+            </div>
+        </div>
+        
+        <div class="visualizations">
+            <div class="viz-section">
+                <h2>📊 Main Dashboard</h2>
+                <div class="viz-grid">
+                    <div class="viz-card full-width">
+                        <img src="outputs/08_summary_dashboard.png" alt="Summary Dashboard">
+                        <div class="caption">Comprehensive Summary Dashboard</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="viz-section">
+                <h2>📈 Trend Analysis</h2>
+                <div class="viz-grid">
+                    <div class="viz-card full-width">
+                        <img src="outputs/01_bed_occupancy_trend.png" alt="Bed Occupancy Trend">
+                        <div class="caption">Bed Occupancy Trend with Moving Averages</div>
+                    </div>
+                    <div class="viz-card full-width">
+                        <img src="outputs/06_forecast_comparison.png" alt="Forecast Comparison">
+                        <div class="caption">7-Day Forecast Comparison (MA vs Trend)</div>
+                    </div>
+                    <div class="viz-card full-width">
+                        <img src="outputs/07_alert_zones.png" alt="Alert Zones">
+                        <div class="caption">Bed Occupancy with Alert Thresholds</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="viz-section">
+                <h2>📊 Distribution & Patterns</h2>
+                <div class="viz-grid">
+                    <div class="viz-card">
+                        <img src="outputs/02_bed_distribution.png" alt="Distribution">
+                        <div class="caption">Bed Count Distribution</div>
+                    </div>
+                    <div class="viz-card">
+                        <img src="outputs/03_bed_boxplot.png" alt="Box Plot">
+                        <div class="caption">Box Plot (Outlier Detection)</div>
+                    </div>
+                    <div class="viz-card">
+                        <img src="outputs/04_monthly_pattern.png" alt="Monthly Pattern">
+                        <div class="caption">Monthly Average Pattern</div>
+                    </div>
+                    <div class="viz-card">
+                        <img src="outputs/05_weekly_pattern.png" alt="Weekly Pattern">
+                        <div class="caption">Weekly Pattern Analysis</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="viz-section">
+                <h2>📋 Statistics Summary</h2>
+                <div class="viz-grid">
+                    <div class="viz-card full-width">
+                        <img src="outputs/09_statistics_table.png" alt="Statistics">
+                        <div class="caption">Complete Statistics Summary</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="data/processed/daily_bed_occupancy.csv" class="download-btn" download>
+                    📥 Download Data (CSV)
+                </a>
+                <a href="data/processed/analysis_summary.json" class="download-btn" download>
+                    📥 Download Summary (JSON)
+                </a>
+            </div>
+        </div>
+        
+        <footer>
+            <p><strong>Healthcare Resource Forecasting System</strong></p>
+            <p>Data Science Project | 2025</p>
+            <p style="margin-top: 10px; opacity: 0.8;">
+                Analyzed 60,000 patients • 70,000 encounters • 3 datasets
+            </p>
+        </footer>
+    </div>
+</body>
+</html>
