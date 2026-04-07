@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Healthcare Resource Forecasting Dashboard</title>
+    <title>DAYA Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <link rel="stylesheet" href="dashboard-styles.css">
 </head>
 <body>
@@ -24,7 +25,7 @@
                 <div class="logo">
                     <i data-lucide="activity" class="logo-icon"></i>
                 </div>
-                <span class="logo-text">HealthForecast</span>
+                <span class="logo-text">DAYA</span>
             </div>
 
             <ul class="nav-menu">
@@ -103,20 +104,14 @@
                 </button>
 
                 <div class="navbar-title">
-                    <h1>Healthcare Resource Forecasting</h1>
+                    <h1>DAYA</h1>
                     <p>Real-time analytics and predictions</p>
                 </div>
 
                 <div class="navbar-actions">
-                    <button class="icon-btn">
-                        <i data-lucide="search"></i>
-                    </button>
-                    <button class="icon-btn">
-                        <i data-lucide="bell"></i>
-                        <span class="notification-dot"></span>
-                    </button>
-                    <button class="icon-btn">
-                        <i data-lucide="settings"></i>
+                    <button id="refresh-btn" class="btn-primary" title="Refresh data from files">
+                        <i data-lucide="refresh-cw"></i>
+                        Refresh Data
                     </button>
                 </div>
             </nav>
@@ -136,8 +131,8 @@
 
                 <!-- Stats Grid -->
                 <div class="stats-grid">
-                    <div class="stat-card glass-card">
-                        <div class="stat-icon" style="background: linear-gradient(135deg, #059669, #34d399);">
+                    <div class="stat-card glass-card" data-stat="patients">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #0ea5e9, #38bdf8);">
                             <i data-lucide="users"></i>
                         </div>
                         <div class="stat-content">
@@ -145,41 +140,41 @@
                             <span class="stat-value">60,000</span>
                             <span class="stat-change positive">
                                 <i data-lucide="trending-up"></i>
-                                12.5%
+                                Analyzed
                             </span>
                         </div>
                     </div>
 
-                    <div class="stat-card glass-card">
-                        <div class="stat-icon" style="background: linear-gradient(135deg, #d4a574, #e8c9a0);">
+                    <div class="stat-card glass-card" data-stat="avg-beds">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #8b5cf6, #a78bfa);">
                             <i data-lucide="bed"></i>
                         </div>
                         <div class="stat-content">
                             <span class="stat-label">Avg Daily Beds</span>
                             <span class="stat-value">787</span>
                             <span class="stat-change neutral">
-                                <i data-lucide="minus"></i>
-                                0.2%
+                                <i data-lucide="activity"></i>
+                                Current
                             </span>
                         </div>
                     </div>
 
-                    <div class="stat-card glass-card">
-                        <div class="stat-icon" style="background: linear-gradient(135deg, #e07a5f, #f4a261);">
+                    <div class="stat-card glass-card" data-stat="icu-ratio">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">
                             <i data-lucide="activity"></i>
                         </div>
                         <div class="stat-content">
                             <span class="stat-label">ICU Ratio</span>
                             <span class="stat-value">20.1%</span>
-                            <span class="stat-change negative">
-                                <i data-lucide="trending-down"></i>
-                                3.2%
+                            <span class="stat-change neutral">
+                                <i data-lucide="percent"></i>
+                                of encounters
                             </span>
                         </div>
                     </div>
 
-                    <div class="stat-card glass-card">
-                        <div class="stat-icon" style="background: linear-gradient(135deg, #0ea5e9, #38bdf8);">
+                    <div class="stat-card glass-card" data-stat="forecast">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #06b6d4, #22d3ee);">
                             <i data-lucide="trending-up"></i>
                         </div>
                         <div class="stat-content">
@@ -187,7 +182,7 @@
                             <span class="stat-value">777</span>
                             <span class="stat-change positive">
                                 <i data-lucide="arrow-up"></i>
-                                Stable
+                                beds/day
                             </span>
                         </div>
                     </div>
@@ -205,9 +200,7 @@
                                 <i data-lucide="maximize-2"></i>
                             </button>
                         </div>
-                        <div class="chart-container">
-                            <img src="outputs/01_bed_occupancy_trend.png" alt="Bed Occupancy Trend">
-                        </div>
+                        <div class="chart-container" id="chart-bed-occupancy" style="min-height: 400px;"></div>
                     </div>
 
                     <div class="chart-card glass-card">
@@ -220,9 +213,7 @@
                                 <i data-lucide="maximize-2"></i>
                             </button>
                         </div>
-                        <div class="chart-container">
-                            <img src="outputs/02_bed_distribution.png" alt="Distribution">
-                        </div>
+                        <div class="chart-container" id="chart-distribution" style="min-height: 400px;"></div>
                     </div>
                 </div>
             </section>
@@ -366,6 +357,453 @@
                 </div>
             </section>
 
+            <!-- Forecasts Section -->
+            <section id="forecasts" class="content-section">
+                <div class="section-header">
+                    <div>
+                        <h2>Forecasting Models</h2>
+                        <p>Predictive analytics for resource planning</p>
+                    </div>
+                </div>
+
+                <div class="forecast-grid">
+                    <div class="forecast-card glass-card">
+                        <div class="card-header">
+                            <i data-lucide="trending-up" class="card-icon"></i>
+                            <div>
+                                <h3>7-Day Moving Average</h3>
+                                <p>Short-term forecast based on recent trends</p>
+                            </div>
+                        </div>
+                        <div class="forecast-content">
+                            <div class="forecast-value">
+                                <span class="forecast-number">777</span>
+                                <span class="forecast-unit">beds</span>
+                            </div>
+                            <div class="forecast-meta">
+                                <span class="meta-item">
+                                    <i data-lucide="calendar"></i>
+                                    Next 7 days average
+                                </span>
+                                <span class="meta-item">
+                                    <i data-lucide="activity"></i>
+                                    Based on rolling window
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="forecast-card glass-card">
+                        <div class="card-header">
+                            <i data-lucide="line-chart" class="card-icon"></i>
+                            <div>
+                                <h3>Trend-Based Forecast</h3>
+                                <p>Linear extrapolation model</p>
+                            </div>
+                        </div>
+                        <div class="forecast-content">
+                            <div class="forecast-timeline">
+                                <div class="timeline-item">
+                                    <span class="timeline-day">Day 1</span>
+                                    <span class="timeline-value">777 beds</span>
+                                </div>
+                                <div class="timeline-item">
+                                    <span class="timeline-day">Day 2</span>
+                                    <span class="timeline-value">776 beds</span>
+                                </div>
+                                <div class="timeline-item">
+                                    <span class="timeline-day">Day 3</span>
+                                    <span class="timeline-value">776 beds</span>
+                                </div>
+                                <div class="timeline-item">
+                                    <span class="timeline-day">Day 4</span>
+                                    <span class="timeline-value">775 beds</span>
+                                </div>
+                                <div class="timeline-item">
+                                    <span class="timeline-day">Day 5</span>
+                                    <span class="timeline-value">775 beds</span>
+                                </div>
+                                <div class="timeline-item">
+                                    <span class="timeline-day">Day 6</span>
+                                    <span class="timeline-value">774 beds</span>
+                                </div>
+                                <div class="timeline-item">
+                                    <span class="timeline-day">Day 7</span>
+                                    <span class="timeline-value">774 beds</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="forecast-card glass-card full-width">
+                        <div class="card-header">
+                            <i data-lucide="bar-chart-2" class="card-icon"></i>
+                            <div>
+                                <h3>Forecast Comparison</h3>
+                                <p>Visual comparison of forecasting methods</p>
+                            </div>
+                        </div>
+                        <div class="chart-container" id="chart-forecast" style="min-height: 400px;"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Alerts Section -->
+            <section id="alerts" class="content-section">
+                <div class="section-header">
+                    <div>
+                        <h2>Alert System</h2>
+                        <p>Real-time monitoring and threshold alerts</p>
+                    </div>
+                    <div class="alert-status">
+                        <span class="status-badge status-normal">
+                            <i data-lucide="check-circle"></i>
+                            System Normal
+                        </span>
+                    </div>
+                </div>
+
+                <div class="alerts-grid">
+                    <div class="alert-card glass-card">
+                        <div class="alert-header">
+                            <div class="alert-icon warning">
+                                <i data-lucide="alert-triangle"></i>
+                            </div>
+                            <div>
+                                <h3>Warning Threshold</h3>
+                                <p>Elevated resource usage</p>
+                            </div>
+                        </div>
+                        <div class="alert-body">
+                            <div class="threshold-value">804 beds</div>
+                            <div class="threshold-info">
+                                <span>Triggers when occupancy exceeds 804 beds</span>
+                                <span class="threshold-status">
+                                    <i data-lucide="check"></i>
+                                    Not triggered
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert-card glass-card">
+                        <div class="alert-header">
+                            <div class="alert-icon critical">
+                                <i data-lucide="alert-octagon"></i>
+                            </div>
+                            <div>
+                                <h3>Critical Threshold</h3>
+                                <p>Maximum capacity alert</p>
+                            </div>
+                        </div>
+                        <div class="alert-body">
+                            <div class="threshold-value">818 beds</div>
+                            <div class="threshold-info">
+                                <span>Triggers when occupancy exceeds 818 beds</span>
+                                <span class="threshold-status">
+                                    <i data-lucide="check"></i>
+                                    Not triggered
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert-card glass-card">
+                        <div class="alert-header">
+                            <div class="alert-icon normal">
+                                <i data-lucide="check-circle"></i>
+                            </div>
+                            <div>
+                                <h3>Current Status</h3>
+                                <p>Real-time occupancy level</p>
+                            </div>
+                        </div>
+                        <div class="alert-body">
+                            <div class="threshold-value">759 beds</div>
+                            <div class="threshold-info">
+                                <span>Current bed occupancy is within normal range</span>
+                                <span class="threshold-status status-ok">
+                                    <i data-lucide="check-circle"></i>
+                                    All systems operational
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert-card glass-card full-width">
+                        <div class="card-header">
+                            <i data-lucide="shield-alert" class="card-icon"></i>
+                            <div>
+                                <h3>Alert Zones Visualization</h3>
+                                <p>Visual representation of threshold levels</p>
+                            </div>
+                        </div>
+                        <div class="chart-container" id="chart-alert-zones" style="min-height: 400px;"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Datasets Section -->
+            <section id="datasets" class="content-section">
+                <div class="section-header">
+                    <div>
+                        <h2>Data Sources</h2>
+                        <p>Overview of datasets used in analysis</p>
+                    </div>
+                </div>
+
+                <div class="datasets-grid">
+                    <div class="dataset-card glass-card">
+                        <div class="dataset-header">
+                            <div class="dataset-icon" style="background: linear-gradient(135deg, #0ea5e9, #38bdf8);">
+                                <i data-lucide="database"></i>
+                            </div>
+                            <div>
+                                <h3>CA Hospital Dataset</h3>
+                                <span class="dataset-badge">Primary</span>
+                            </div>
+                        </div>
+                        <div class="dataset-body">
+                            <p>Comprehensive hospital operations data covering patient visits, admissions, billing, and procedures.</p>
+                            <div class="dataset-stats">
+                                <div class="dataset-stat">
+                                    <i data-lucide="users"></i>
+                                    <span>60,000 patients</span>
+                                </div>
+                                <div class="dataset-stat">
+                                    <i data-lucide="activity"></i>
+                                    <span>70,000 encounters</span>
+                                </div>
+                                <div class="dataset-stat">
+                                    <i data-lucide="calendar"></i>
+                                    <span>Q1 2025</span>
+                                </div>
+                            </div>
+                            <div class="dataset-files">
+                                <span class="file-tag">patients.csv</span>
+                                <span class="file-tag">encounters.csv</span>
+                                <span class="file-tag">procedures.csv</span>
+                                <span class="file-tag">medications.csv</span>
+                                <span class="file-tag">+5 more</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dataset-card glass-card">
+                        <div class="dataset-header">
+                            <div class="dataset-icon" style="background: linear-gradient(135deg, #8b5cf6, #a78bfa);">
+                                <i data-lucide="heart-pulse"></i>
+                            </div>
+                            <div>
+                                <h3>ICU Patient Dataset</h3>
+                                <span class="dataset-badge">Critical Care</span>
+                            </div>
+                        </div>
+                        <div class="dataset-body">
+                            <p>ICU patient records with clinical variables including ventilator data, lab values, and outcomes.</p>
+                            <div class="dataset-stats">
+                                <div class="dataset-stat">
+                                    <i data-lucide="bed"></i>
+                                    <span>3,600+ ICU records</span>
+                                </div>
+                                <div class="dataset-stat">
+                                    <i data-lucide="bar-chart"></i>
+                                    <span>120 features</span>
+                                </div>
+                                <div class="dataset-stat">
+                                    <i data-lucide="percent"></i>
+                                    <span>20.1% ICU ratio</span>
+                                </div>
+                            </div>
+                            <div class="dataset-files">
+                                <span class="file-tag">X_train_2025.csv</span>
+                                <span class="file-tag">y_train_2025.csv</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dataset-card glass-card">
+                        <div class="dataset-header">
+                            <div class="dataset-icon" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">
+                                <i data-lucide="trending-up"></i>
+                            </div>
+                            <div>
+                                <h3>Hospital Records (2021-2024)</h3>
+                                <span class="dataset-badge">Time Series</span>
+                            </div>
+                        </div>
+                        <div class="dataset-body">
+                            <p>Multi-year hospital records for time-series analysis, seasonal patterns, and trend forecasting.</p>
+                            <div class="dataset-stats">
+                                <div class="dataset-stat">
+                                    <i data-lucide="calendar-range"></i>
+                                    <span>4 years of data</span>
+                                </div>
+                                <div class="dataset-stat">
+                                    <i data-lucide="clock"></i>
+                                    <span>36 days analyzed</span>
+                                </div>
+                                <div class="dataset-stat">
+                                    <i data-lucide="database"></i>
+                                    <span>28,323 clean records</span>
+                                </div>
+                            </div>
+                            <div class="dataset-files">
+                                <span class="file-tag">hospital_records_2021_2024_with_bills.csv</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="data-quality glass-card">
+                    <div class="card-header">
+                        <i data-lucide="shield-check" class="card-icon"></i>
+                        <div>
+                            <h3>Data Quality Metrics</h3>
+                            <p>Cleaning and preprocessing summary</p>
+                        </div>
+                    </div>
+                    <div class="quality-grid">
+                        <div class="quality-item">
+                            <div class="quality-label">Total Records</div>
+                            <div class="quality-value">70,000</div>
+                        </div>
+                        <div class="quality-item">
+                            <div class="quality-label">Clean Records</div>
+                            <div class="quality-value">28,323</div>
+                        </div>
+                        <div class="quality-item">
+                            <div class="quality-label">Removed</div>
+                            <div class="quality-value">41,677</div>
+                        </div>
+                        <div class="quality-item">
+                            <div class="quality-label">Data Quality</div>
+                            <div class="quality-value">40.5%</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Reports Section -->
+            <section id="reports" class="content-section">
+                <div class="section-header">
+                    <div>
+                        <h2>Reports & Documentation</h2>
+                        <p>Downloadable reports and project documentation</p>
+                    </div>
+                </div>
+
+                <div class="reports-grid">
+                    <div class="report-card glass-card">
+                        <div class="report-icon">
+                            <i data-lucide="file-text"></i>
+                        </div>
+                        <div class="report-content">
+                            <h3>Full Project Report</h3>
+                            <p>Complete analysis with visualizations and insights</p>
+                            <div class="report-meta">
+                                <span><i data-lucide="file"></i> HTML</span>
+                                <span><i data-lucide="calendar"></i> Updated Apr 2026</span>
+                            </div>
+                        </div>
+                        <a href="PROJECT_REPORT.html" target="_blank" class="report-btn">
+                            <i data-lucide="external-link"></i>
+                            View Report
+                        </a>
+                    </div>
+
+                    <div class="report-card glass-card">
+                        <div class="report-icon">
+                            <i data-lucide="book-open"></i>
+                        </div>
+                        <div class="report-content">
+                            <h3>Jupyter Notebooks</h3>
+                            <p>Interactive analysis notebooks for Google Colab</p>
+                            <div class="report-meta">
+                                <span><i data-lucide="file"></i> IPYNB</span>
+                                <span><i data-lucide="code"></i> 2 notebooks</span>
+                            </div>
+                        </div>
+                        <a href="notebooks/" class="report-btn">
+                            <i data-lucide="folder"></i>
+                            Open Folder
+                        </a>
+                    </div>
+
+                    <div class="report-card glass-card">
+                        <div class="report-icon">
+                            <i data-lucide="bar-chart-3"></i>
+                        </div>
+                        <div class="report-content">
+                            <h3>Analysis Summary</h3>
+                            <p>JSON file with all statistical metrics</p>
+                            <div class="report-meta">
+                                <span><i data-lucide="file"></i> JSON</span>
+                                <span><i data-lucide="database"></i> 2.4 KB</span>
+                            </div>
+                        </div>
+                        <a href="data/processed/analysis_summary.json" download class="report-btn">
+                            <i data-lucide="download"></i>
+                            Download
+                        </a>
+                    </div>
+
+                    <div class="report-card glass-card">
+                        <div class="report-icon">
+                            <i data-lucide="image"></i>
+                        </div>
+                        <div class="report-content">
+                            <h3>Visualizations</h3>
+                            <p>High-resolution charts and graphs (300 DPI)</p>
+                            <div class="report-meta">
+                                <span><i data-lucide="file"></i> PNG</span>
+                                <span><i data-lucide="images"></i> 9 images</span>
+                            </div>
+                        </div>
+                        <a href="outputs/" class="report-btn">
+                            <i data-lucide="folder"></i>
+                            Open Folder
+                        </a>
+                    </div>
+
+                    <div class="report-card glass-card">
+                        <div class="report-icon">
+                            <i data-lucide="table"></i>
+                        </div>
+                        <div class="report-content">
+                            <h3>Processed Data</h3>
+                            <p>Daily bed occupancy time series data</p>
+                            <div class="report-meta">
+                                <span><i data-lucide="file"></i> CSV</span>
+                                <span><i data-lucide="calendar"></i> 36 days</span>
+                            </div>
+                        </div>
+                        <a href="data/processed/daily_bed_occupancy.csv" download class="report-btn">
+                            <i data-lucide="download"></i>
+                            Download
+                        </a>
+                    </div>
+
+                    <div class="report-card glass-card">
+                        <div class="report-icon">
+                            <i data-lucide="book"></i>
+                        </div>
+                        <div class="report-content">
+                            <h3>Documentation</h3>
+                            <p>Usage guides, insights, and problem definition</p>
+                            <div class="report-meta">
+                                <span><i data-lucide="file"></i> Markdown</span>
+                                <span><i data-lucide="files"></i> Multiple files</span>
+                            </div>
+                        </div>
+                        <a href="docs/" class="report-btn">
+                            <i data-lucide="folder"></i>
+                            Open Folder
+                        </a>
+                    </div>
+                </div>
+            </section>
+
             <!-- Visualizations Section -->
             <section id="visualizations" class="content-section">
                 <div class="section-header">
@@ -373,62 +811,60 @@
                         <h2>Data Visualizations</h2>
                         <p>Interactive charts and graphs</p>
                     </div>
-                    <div class="view-toggle">
-                        <button class="toggle-btn active">
-                            <i data-lucide="grid-3x3"></i>
-                        </button>
-                        <button class="toggle-btn">
-                            <i data-lucide="list"></i>
-                        </button>
+                </div>
+
+                <div class="charts-row">
+                    <div class="chart-card glass-card">
+                        <div class="card-header">
+                            <div>
+                                <h3>Box Plot</h3>
+                                <p>Outlier detection analysis</p>
+                            </div>
+                        </div>
+                        <div class="chart-container" id="chart-boxplot" style="min-height: 400px;"></div>
+                    </div>
+
+                    <div class="chart-card glass-card">
+                        <div class="card-header">
+                            <div>
+                                <h3>Monthly Pattern</h3>
+                                <p>Average beds by month</p>
+                            </div>
+                        </div>
+                        <div class="chart-container" id="chart-monthly" style="min-height: 400px;"></div>
                     </div>
                 </div>
 
-                <div class="viz-grid">
-                    <div class="viz-card glass-card">
-                        <div class="viz-header">
-                            <i data-lucide="calendar" class="viz-icon"></i>
-                            <h4>Monthly Pattern</h4>
+                <div class="charts-row">
+                    <div class="chart-card glass-card">
+                        <div class="card-header">
+                            <div>
+                                <h3>Weekly Pattern</h3>
+                                <p>Average beds by day of week</p>
+                            </div>
                         </div>
-                        <img src="outputs/04_monthly_pattern.png" alt="Monthly Pattern">
+                        <div class="chart-container" id="chart-weekly" style="min-height: 400px;"></div>
                     </div>
+                </div>
+            </section>
 
-                    <div class="viz-card glass-card">
-                        <div class="viz-header">
-                            <i data-lucide="calendar-days" class="viz-icon"></i>
-                            <h4>Weekly Pattern</h4>
-                        </div>
-                        <img src="outputs/05_weekly_pattern.png" alt="Weekly Pattern">
+            <!-- Statistics Section -->
+            <section class="content-section">
+                <div class="section-header">
+                    <div>
+                        <h2>Statistics Summary</h2>
+                        <p>Complete statistical analysis</p>
                     </div>
+                </div>
 
-                    <div class="viz-card glass-card">
-                        <div class="viz-header">
-                            <i data-lucide="trending-up" class="viz-icon"></i>
-                            <h4>Forecast Comparison</h4>
-                        </div>
-                        <img src="outputs/06_forecast_comparison.png" alt="Forecast">
-                    </div>
-
-                    <div class="viz-card glass-card">
-                        <div class="viz-header">
-                            <i data-lucide="shield-alert" class="viz-icon"></i>
-                            <h4>Alert Zones</h4>
-                        </div>
-                        <img src="outputs/07_alert_zones.png" alt="Alert Zones">
-                    </div>
-
-                    <div class="viz-card glass-card full-width">
-                        <div class="viz-header">
-                            <i data-lucide="layout-dashboard" class="viz-icon"></i>
-                            <h4>Summary Dashboard</h4>
-                        </div>
-                        <img src="outputs/08_summary_dashboard.png" alt="Dashboard">
-                    </div>
+                <div class="analysis-card glass-card">
+                    <div id="statistics-table"></div>
                 </div>
             </section>
 
             <!-- Footer -->
             <footer class="dashboard-footer">
-                <p>Healthcare Resource Forecasting System • Data Science Project 2025</p>
+                <p>DAYA System • Data Science Project 2025</p>
                 <div class="footer-links">
                     <a href="#"><i data-lucide="github"></i></a>
                     <a href="#"><i data-lucide="linkedin"></i></a>
@@ -439,6 +875,7 @@
     </div>
 
     <script src="dashboard-script.js"></script>
+    <script src="dashboard-charts.js"></script>
     <script>
         lucide.createIcons();
     </script>
