@@ -1,7 +1,9 @@
-# Healthcare Resource Forecasting System
+# Healthcare Resource Forecasting System - DAYA
+
+**Created by Team MRP**
 
 ## 🎯 Project Overview
-A data science project focused on forecasting healthcare resource demand (hospital beds, ICU capacity, oxygen supply) using real-world hospital datasets from 2021-2025.
+A comprehensive data science project focused on forecasting healthcare resource demand (hospital beds, ICU capacity, oxygen supply) using real-world hospital datasets from 2021-2025. This project demonstrates end-to-end data science workflow with interactive dashboards, predictive analytics, and actionable insights.
 
 ## 📊 Problem Statement
 Healthcare facilities face critical challenges in resource allocation. This project aims to:

@@ -335,11 +335,13 @@ print(f"✓ Saved: {save_path}")
 # 9. STATISTICS TABLE
 # ============================================================================
 print("\n[10/10] Creating statistics summary...")
-fig, ax = plt.subplots(figsize=(12, 8))
+fig, ax = plt.subplots(figsize=(12, 9))
 ax.axis('tight')
 ax.axis('off')
 
 stats_data = [
+    ['Healthcare Resource Forecasting - Statistics Summary', ''],
+    ['', ''],
     ['Metric', 'Value'],
     ['', ''],
     ['DATA SUMMARY', ''],
@@ -378,19 +380,21 @@ table.auto_set_font_size(False)
 table.set_fontsize(11)
 table.scale(1, 2)
 
+# Style title row
+for i in range(2):
+    table[(0, i)].set_facecolor('#1a5276')
+    table[(0, i)].set_text_props(weight='bold', color='white', fontsize=13)
+
 # Style header
 for i in range(2):
-    table[(0, i)].set_facecolor('#2E86AB')
-    table[(0, i)].set_text_props(weight='bold', color='white')
+    table[(2, i)].set_facecolor('#2E86AB')
+    table[(2, i)].set_text_props(weight='bold', color='white')
 
 # Style section headers
-for row in [2, 8, 15, 17, 22, 24]:
+for row in [4, 10, 17, 19, 24, 26]:
     table[(row, 0)].set_facecolor('#F18F01')
     table[(row, 0)].set_text_props(weight='bold', color='white')
     table[(row, 1)].set_facecolor('#F18F01')
-
-plt.title('Healthcare Resource Forecasting - Statistics Summary', 
-          fontsize=16, fontweight='bold', pad=20)
 
 save_path = output_dir / '09_statistics_table.png'
 plt.savefig(save_path, dpi=300, bbox_inches='tight')

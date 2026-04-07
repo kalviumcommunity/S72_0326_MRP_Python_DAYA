@@ -229,11 +229,11 @@ if (exportBtn) {
             position: fixed;
             top: 100px;
             right: 24px;
-            background: linear-gradient(135deg, #059669, #34d399);
+            background: linear-gradient(135deg, #0ea5e9, #38bdf8);
             color: white;
             padding: 16px 24px;
             border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(5, 150, 105, 0.3);
+            box-shadow: 0 8px 24px rgba(14, 165, 233, 0.3);
             z-index: 10000;
             display: flex;
             align-items: center;
@@ -285,6 +285,6 @@ style.textContent = `
 document.head.appendChild(style);
 
 // Console welcome message
-console.log('%c🏥 Healthcare Forecasting Dashboard', 'color: #059669; font-size: 20px; font-weight: bold;');
-console.log('%cDeveloped with ❤️ using Glass Admin Template', 'color: #d4a574; font-size: 14px;');
-console.log('%cTheme: ' + html.getAttribute('data-theme'), 'color: #e07a5f; font-size: 12px;');
+console.log('%c🏥 Healthcare Forecasting Dashboard', 'color: #0ea5e9; font-size: 20px; font-weight: bold;');
+console.log('%cDeveloped with ❤️ using Glass Admin Template', 'color: #38bdf8; font-size: 14px;');
+console.log('%cTheme: ' + html.getAttribute('data-theme'), 'color: #06b6d4; font-size: 12px;');

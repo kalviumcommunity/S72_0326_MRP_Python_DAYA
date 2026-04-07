@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Healthcare Resource Forecasting - Complete Analysis Report</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+        }
+        
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        header p {
+            font-size: 1.3em;
+            opacity: 0.95;
+        }
+        
+        /* Navigation */
+        nav {
+            background: #2c3e50;
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        nav li {
+            margin: 0;
+        }
+        
+        nav a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 18px 25px;
+            transition: background 0.3s;
+            font-weight: 600;
+        }
+        
+        nav a:hover {
+            background: #34495e;
+        }
+        
+        /* Sections */
+        section {
+            padding: 60px 40px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        section:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        h2 {
+            font-size: 2.5em;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 4px solid #667eea;
+        }
+        
+        h3 {
+            font-size: 1.8em;
+            color: #34495e;
+            margin: 30px 0 20px 0;
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s;
+            border-left: 5px solid #667eea;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-card .value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 10px 0;
+        }
+        
+        .stat-card .label {
+            color: #7f8c8d;
+            font-size: 0.95em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Before/After Comparison */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .comparison-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .comparison-card.before {
+            border-left: 5px solid #e74c3c;
+        }
+        
+        .comparison-card.after {
+            border-left: 5px solid #27ae60;
+        }
+        
+        .comparison-card h4 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+        
+        .comparison-card.before h4 {
+            color: #e74c3c;
+        }
+        
+        .comparison-card.after h4 {
+            color: #27ae60;
+        }
+
+        /* Insights & Recommendations */
+        .insight-box, .recommendation-box {
+            background: white;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .insight-box {
+            border-left: 5px solid #3498db;
+        }
+        
+        .recommendation-box {
+            border-left: 5px solid #f39c12;
+        }
+        
+        .insight-box h4, .recommendation-box h4 {
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .insight-box h4 {
+            color: #3498db;
+        }
+        
+        .recommendation-box h4 {
+            color: #f39c12;
+        }
+        
+        .insight-box p, .recommendation-box p {
+            color: #555;
+            line-height: 1.8;
+        }
+        
+        /* Visualization Grid */
+        .viz-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .viz-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .viz-card:hover {
+            transform: scale(1.02);
+        }
+        
+        .viz-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .viz-card .caption {
+            padding: 20px;
+            background: #f8f9fa;
+            text-align: center;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        
+        /* Process Steps */
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+        
+        .step {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8em;
+            font-weight: bold;
+            margin: 0 auto 20px;
+        }
+        
+        .step h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .step p {
+            color: #7f8c8d;
+            font-size: 0.95em;
+        }
+        
+        /* Lists */
+        ul {
+            margin: 20px 0;
+            padding-left: 30px;
+        }
+        
+        li {
+            margin: 12px 0;
+            color: #555;
+            line-height: 1.8;
+        }
+        
+        /* Highlight boxes */
+        .highlight {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+        
+        .success {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+        
+        .critical {
+            background: #f8d7da;
+            border-left: 5px solid #dc3545;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+        
+        /* Footer */
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 40px;
+        }
+        
+        footer p {
+            margin: 10px 0;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+            
+            nav ul {
+                flex-direction: column;
+            }
+            
+            header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>🏥 Healthcare Resource Forecasting</h1>
+            <p>Complete Data Science Analysis Report</p>
+            <p style="margin-top: 10px; font-size: 1em; opacity: 0.9;">
+                From Raw Data to Actionable Insights
+            </p>
+        </header>
+        
+        <!-- Navigation -->
+        <nav>
+            <ul>
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#preprocessing">Data Preprocessing</a></li>
+                <li><a href="#analysis">Data Analysis</a></li>
+                <li><a href="#visualization">Visualizations</a></li>
+                <li><a href="#insights">Key Insights</a></li>
+                <li><a href="#recommendations">Recommendations</a></li>
+            </ul>
+        </nav>
+        
+        <!-- Overview Section -->
+        <section id="overview">
+            <h2>📊 Project Overview</h2>
+            
+            <p style="font-size: 1.2em; color: #555; margin-bottom: 30px;">
+                This project analyzes healthcare resource utilization across 60,000 patients and 70,000 encounters 
+                to forecast bed demand, identify patterns, and provide actionable recommendations for hospital administrators.
+            </p>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="label">Total Patients</div>
+                    <div class="value">60,000</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Total Encounters</div>
+                    <div class="value">70,000</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Datasets Used</div>
+                    <div class="value">3</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Analysis Period</div>
+                    <div class="value">336 Days</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Data Points</div>
+                    <div class="value">130K+</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Visualizations</div>
+                    <div class="value">9</div>
+                </div>
+            </div>
+            
+            <h3>🎯 Project Goals</h3>
+            <ul>
+                <li><strong>Forecast bed demand</strong> 7-14 days ahead for capacity planning</li>
+                <li><strong>Identify patterns</strong> in patient admissions and resource utilization</li>
+                <li><strong>Detect anomalies</strong> and potential resource shortages</li>
+                <li><strong>Generate actionable insights</strong> for hospital administrators</li>
+                <li><strong>Create alert system</strong> for critical resource thresholds</li>
+            </ul>
+        </section>
+        
+        <!-- Data Preprocessing Section -->
+        <section id="preprocessing">
+            <h2>🔧 Data Preprocessing</h2>
+            
+            <p style="font-size: 1.1em; color: #555; margin-bottom: 30px;">
+                Before analysis, raw data must be cleaned and transformed into a structured format suitable for accurate results.
+            </p>
+            
+            <div class="comparison">
+                <div class="comparison-card before">
+                    <h4>❌ Before Preprocessing</h4>
+                    <ul>
+                        <li><strong>70,000 encounters</strong> with mixed data quality</li>
+                        <li><strong>139,716 missing values</strong> across datasets</li>
+                        <li><strong>41,677 invalid dates</strong> (59.5% of records)</li>
+                        <li><strong>Inconsistent formats</strong> in date fields</li>
+                        <li><strong>No derived features</strong> for analysis</li>
+                        <li><strong>Raw categorical data</strong> not ready for modeling</li>
+                    </ul>
+                </div>
+                
+                <div class="comparison-card after">
+                    <h4>✅ After Preprocessing</h4>
+                    <ul>
+                        <li><strong>28,323 clean encounters</strong> (40.5% retained)</li>
+                        <li><strong>Zero missing values</strong> in critical fields</li>
+                        <li><strong>Standardized date formats</strong> (YYYY-MM-DD)</li>
+                        <li><strong>36 days of aggregated data</strong> ready for analysis</li>
+                        <li><strong>5 engineered features</strong> (MA_7, MA_14, month, day_of_week, is_weekend)</li>
+                        <li><strong>Validated data types</strong> and ranges</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <h3>📋 Preprocessing Steps</h3>
+            
+            <div class="process-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h4>Data Ingestion</h4>
+                    <p>Loaded 3 datasets: CA Hospital (Q1 2025), ICU records, and historical data (2021-2024)</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h4>Data Cleaning</h4>
+                    <p>Removed 41,677 rows with invalid dates, handled missing values, standardized formats</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h4>Handling Outliers</h4>
+                    <p>Identified outliers using box plots, validated extreme values against business rules</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h4>Feature Engineering</h4>
+                    <p>Created moving averages (7-day, 14-day), time features (month, day_of_week, is_weekend)</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <h4>Data Aggregation</h4>
+                    <p>Aggregated encounters to daily bed counts, calculated ICU ratio (20.1%)</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">6</div>
+                    <h4>Validation</h4>
+                    <p>Verified data quality, checked for consistency, validated date ranges</p>
+                </div>
+            </div>
+            
+            <div class="success">
+                <strong>✅ Result:</strong> Clean, structured dataset with 36 days of daily bed occupancy data, 
+                ready for time series analysis and forecasting. Data quality improved from 40.5% to 100% usable records.
+            </div>
+        </section>
+
+        <!-- Data Analysis Section -->
+        <section id="analysis">
+            <h2>📈 Data Analysis</h2>
+            
+            <p style="font-size: 1.1em; color: #555; margin-bottom: 30px;">
+                Data analysis focuses on exploring and interpreting data to identify patterns, relationships, and useful insights.
+            </p>
+            
+            <h3>1️⃣ Exploratory Data Analysis (EDA)</h3>
+            
+            <div class="process-steps">
+                <div class="step">
+                    <div class="step-number">📊</div>
+                    <h4>Univariate Analysis</h4>
+                    <p>Analyzed individual variables: bed count distribution, mean (787), median (790.5), std dev (28.4)</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">📉</div>
+                    <h4>Bivariate Analysis</h4>
+                    <p>Studied relationships between variables, identified correlations between ICU admissions and bed demand</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">⏰</div>
+                    <h4>Time Series Analysis</h4>
+                    <p>Detected trends (decreasing -0.53 beds/day), identified seasonal patterns across months and weekdays</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">🔗</div>
+                    <h4>Correlation Analysis</h4>
+                    <p>Computed correlation matrices, found strong relationships between emergency visits and bed occupancy</p>
+                </div>
+            </div>
+            
+            <h3>2️⃣ Statistical Analysis</h3>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="label">Average Daily Beds</div>
+                    <div class="value">787</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Median Daily Beds</div>
+                    <div class="value">790.5</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Peak Demand</div>
+                    <div class="value">840</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Minimum Demand</div>
+                    <div class="value">715</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Standard Deviation</div>
+                    <div class="value">28.4</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Skewness</div>
+                    <div class="value">-0.48</div>
+                </div>
+            </div>
+            
+            <h3>3️⃣ Identifying Correlations</h3>
+            
+            <div class="insight-box">
+                <h4>🔍 Key Correlations Discovered</h4>
+                <ul>
+                    <li><strong>ICU/Emergency visits → Bed occupancy:</strong> 20.1% of encounters are ICU/Emergency, 
+                    directly impacting bed demand</li>
+                    <li><strong>Day of week → Occupancy:</strong> Weekends show different patterns (Sat: 800.2, Sun: 795.4 avg beds)</li>
+                    <li><strong>Monthly seasonality:</strong> Peak in September (822.7 beds), lowest in May/June (770.7 beds)</li>
+                    <li><strong>Trend direction:</strong> Decreasing trend (-0.53 beds/day) suggests improving efficiency or reduced admissions</li>
+                </ul>
+            </div>
+            
+            <h3>4️⃣ Forecasting Models</h3>
+            
+            <div class="comparison">
+                <div class="comparison-card before">
+                    <h4>📊 Moving Average Forecast</h4>
+                    <ul>
+                        <li><strong>Method:</strong> 7-day rolling average</li>
+                        <li><strong>Forecast:</strong> 777.4 beds/day (constant)</li>
+                        <li><strong>Best for:</strong> Short-term predictions (1-7 days)</li>
+                        <li><strong>Advantage:</strong> Simple, smooth, reduces noise</li>
+                        <li><strong>Use case:</strong> Daily operational planning</li>
+                    </ul>
+                </div>
+                
+                <div class="comparison-card after">
+                    <h4>📈 Trend-Based Forecast</h4>
+                    <ul>
+                        <li><strong>Method:</strong> Linear regression extrapolation</li>
+                        <li><strong>Forecast:</strong> 777.0 → 773.8 beds (decreasing)</li>
+                        <li><strong>Best for:</strong> Medium-term predictions (7-14 days)</li>
+                        <li><strong>Advantage:</strong> Captures trend direction</li>
+                        <li><strong>Use case:</strong> Strategic capacity planning</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="highlight">
+                <strong>📊 Forecast Accuracy:</strong> R-squared = 0.038 indicates low predictability from linear trend alone. 
+                This suggests bed demand is influenced by multiple factors beyond time, requiring more sophisticated models 
+                (ARIMA, Prophet) for better accuracy.
+            </div>
+        </section>
+        
+        <!-- Visualization Section -->
+        <section id="visualization">
+            <h2>📊 Data Visualization</h2>
+            
+            <p style="font-size: 1.1em; color: #555; margin-bottom: 30px;">
+                Visualization helps present data insights clearly using charts and graphs, making complex information easier to understand.
+            </p>
+            
+            <h3>🛠️ Tools Used</h3>
+            <div class="process-steps">
+                <div class="step">
+                    <div class="step-number">📈</div>
+                    <h4>Matplotlib</h4>
+                    <p>Core plotting library for line charts, histograms, and custom visualizations</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">🎨</div>
+                    <h4>Seaborn</h4>
+                    <p>Statistical visualization for distribution plots, box plots, and heatmaps</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">📊</div>
+                    <h4>Pandas</h4>
+                    <p>Data manipulation and aggregation for time series analysis</p>
+                </div>
+            </div>
+            
+            <h3>📊 Key Visualizations</h3>
+            
+            <div class="viz-grid">
+                <div class="viz-card full-width">
+                    <img src="outputs/08_summary_dashboard.png" alt="Summary Dashboard">
+                    <div class="caption">📊 Comprehensive Summary Dashboard - All Key Metrics at a Glance</div>
+                </div>
+                
+                <div class="viz-card full-width">
+                    <img src="outputs/01_bed_occupancy_trend.png" alt="Bed Occupancy Trend">
+                    <div class="caption">📈 Bed Occupancy Trend with 7-Day and 14-Day Moving Averages</div>
+                </div>
+                
+                <div class="viz-card full-width">
+                    <img src="outputs/06_forecast_comparison.png" alt="Forecast">
+                    <div class="caption">🔮 7-Day Forecast: Moving Average vs Trend-Based Prediction</div>
+                </div>
+                
+                <div class="viz-card full-width">
+                    <img src="outputs/07_alert_zones.png" alt="Alert Zones">
+                    <div class="caption">⚠️ Alert Zones: Warning (804 beds) and Critical (818 beds) Thresholds</div>
+                </div>
+                
+                <div class="viz-card">
+                    <img src="outputs/02_bed_distribution.png" alt="Distribution">
+                    <div class="caption">📊 Distribution of Daily Bed Occupancy</div>
+                </div>
+                
+                <div class="viz-card">
+                    <img src="outputs/03_bed_boxplot.png" alt="Box Plot">
+                    <div class="caption">📦 Box Plot for Outlier Detection</div>
+                </div>
+                
+                <div class="viz-card">
+                    <img src="outputs/04_monthly_pattern.png" alt="Monthly">
+                    <div class="caption">📅 Monthly Average Bed Occupancy Pattern</div>
+                </div>
+                
+                <div class="viz-card">
+                    <img src="outputs/05_weekly_pattern.png" alt="Weekly">
+                    <div class="caption">📆 Weekly Pattern: Weekday vs Weekend Demand</div>
+                </div>
+                
+                <div class="viz-card full-width">
+                    <img src="outputs/09_statistics_table.png" alt="Statistics">
+                    <div class="caption">📋 Complete Statistics Summary Table</div>
+                </div>
+            </div>
+        </section>
